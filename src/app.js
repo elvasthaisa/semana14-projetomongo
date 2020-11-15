@@ -19,6 +19,7 @@ db.once("open", () => {
 });
 
 //rotas
+const index = require("./routes/index");
 const bandas = require("./routes/bandasRoute");
 
 //configurar o parser do JSON
@@ -31,8 +32,9 @@ app.use(function (req, res, next) {
     "Origin, X-Requested-With, Content-Type, Accept"
     )
     next()
-  })
+});
 
+app.use("/", index);
 app.use("/bandas", bandas);
 
 module.exports = app;

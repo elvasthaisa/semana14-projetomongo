@@ -4,25 +4,35 @@ const getAll = (req, res) => {
     console.log(req.url);
     bandas.find(function(err, bandas) {
       if(err) {
-        res.status(424).send({ message : err.message })
+        return res.status(424).send({ message : err.message })
       }
-      res.status(200).send(bandas);
+      return res.status(200).send(bandas);
     })
 };
 
-const getById = (req, res) => {
+// const getById = (req, res) => {
+//   const id = req.params.id;
 
-}
+//   bandas.find({ id }, { banda: 1, genero: 1, integrantes: 1,  formacao: 1, _id: 0 }, (err) => {
+//     if (err) {
+//       return res.status(424).send({ message: err.message })
+//     } else if (bandas.length > 0) {
+//       return res.status(200).send(bandas)
+//     } else {
+//       return res.status(404).send("O id não foi encontrado")
+//     }
+//   })
+// }
 
 const getBandaByGenero = (req, res) => {
     console.log(req.url);
-    clientes.find({ genero }, { banda: 1, genero: 1, formacao: 1, _id: 0 }, function(err, banda){
+    bandas.find({ genero }, { banda: 1, genero: 1, integrantes: 1,  formacao: 1, _id: 0 }, function(err, banda){
       if(err) {
-        res.status(424).send({ message: err.message })
+        return res.status(424).send({ message: err.message })
       } else if (bandas.length > 0) {
-        res.status(200).send(banda)
+        return res.status(200).send(bandas)
       } else {
-        res.status(404).send("O gênero não foi encontrado");
+        return res.status(404).send("O gênero não foi encontrado");
       }
     })
 };
@@ -35,33 +45,42 @@ const postBanda = (req, res) => {
 
     banda.save(function(err) {
       if(err) {
-        res.status(424).send({ message: err.message })
+        return res.status(424).send({ message: err.message })
       }
-      res.status(201).send(banda)
+      return res.status(201).send(banda)
     })
 };
 
 const updateBanda = (req, res) => {
-    console.log(req.body);
-}
-
-const deleteBanda = (req, res) => {
     const id = req.params.id;
+    console.log(id);
 
-    banda.deletMany({ id }, function(err) {
-      if(err) {
-        res.status(424).send({ message: err.message})
+    bandas.updateMany({ id }, { $set: req.body }, function (err) {
+      if (err) {
+        return res.status(500).send({ message: err.message });
       } else {
-        res.status(200).send({ message: "Banda deletada com sucesso!"})
+        return res.status(200).send(bandas)
       }
     })
-};
+}
+
+// const deleteBanda = (req, res) => {
+//     const id = req.params.id;
+
+//     bandas.deleteMany({ id }, function(err) {
+//       if(err) {
+//         return res.status(424).send({ message: err.message})
+//       } else {
+//         return res.status(200).send(bandas)
+//       }
+//     })
+// };
 
 module.exports = {
     getAll,
-    getById,
+    // getById,
     getBandaByGenero,
     postBanda,
-    deleteBanda,
+    // deleteBanda,
     updateBanda
 }
